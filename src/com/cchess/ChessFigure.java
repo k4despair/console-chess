@@ -35,14 +35,15 @@ public abstract class ChessFigure {
         value.clear();
     }
     
-    protected boolean addMoveTile(ChessTile target) {
+    protected boolean addMoveTile(ChessTile target, boolean onlyMove, boolean onlyHit) {
         ChessFigure targetFigure = target.getFigure();
         target.setHit(this.side);
         value.addMove();
-        if(targetFigure==null) {
+        if(targetFigure==null && !onlyHit) {
             moves.add(new Move(tile.getCoord(), target.getCoord()));
             return true;
         }
+        if(targetFigure==null || onlyMove) return false;
         if(targetFigure.getSide() == side) value.bonusSupport();
         else {
             value.bonusHit();
@@ -53,7 +54,7 @@ public abstract class ChessFigure {
     
     protected void addMoveRay(ChessPosition chPosition, int dV, int dH) {
         TileCoord target=tile.getCoord().offSet(dV,dH);
-        for(int i=1; target.isValid()&&addMoveTile(chPosition.getTile(target)); i++,target=tile.getCoord().offSet(i*dV,i*dH) );
+        for(int i=1; target.isValid()&&addMoveTile(chPosition.getTile(target),false,false); i++,target=tile.getCoord().offSet(i*dV,i*dH) );
     }
     
     protected void addMoveCross(ChessPosition chPosition, int dV, int dH) {
@@ -167,7 +168,7 @@ class King extends ChessFigure{
             for(int j=-1;j<2;j++)
                 if(i!=0 || j!=0)  {
                     TileCoord target=tile.getCoord().offSet(i,j);
-                    if(target.isValid()) addMoveTile(chPosition.getTile(target));
+                    if(target.isValid()) addMoveTile(chPosition.getTile(target),false,false);
                }
     }
     
@@ -190,12 +191,42 @@ class Knight extends ChessFigure{
             for(int j=-1;j<2;j+=2)
                 if(i!=0)  {
                     TileCoord target=tile.getCoord().offSet(i,j*(3-Math.abs(i)));
-                    if(target.isValid()) addMoveTile(chPosition.getTile(target));
+                    if(target.isValid()) addMoveTile(chPosition.getTile(target),false,false);
                }
     }
     
     public ChessFigure copy(ChessPosition chPosition) {
         Knight res = new Knight(this.side);
+        res.moveTo(chPosition.getTile(this.tile.getCoord()));
+        return res;
+    }
+}
+
+class Pawn extends ChessFigure{
+    Pawn(Side side) {
+        super(side);
+        avatar = (side == Side.WHITE) ? "\u001b[37m\u265F":"\u001b[34m\u265F";
+        value = new Value(.8, .1);
+    }
+    
+    protected void generateMoves(ChessPosition chPosition) {
+        int direction = (side==Side.WHITE) ? 1:-1;
+        TileCoord target=tile.getCoord().offSet(direction,0);
+        if(target.isValid()&&addMoveTile(chPosition.getTile(target),true,false)&&((tile.getCoord().getV()-direction)%7==0)) {
+            addMoveTile(chPosition.getTile(tile.getCoord().offSet(2*direction,0)),true,false);
+        }
+        target=tile.getCoord().offSet(direction,1);
+        if(target.isValid()) {
+            addMoveTile(chPosition.getTile(target),false,true);
+        }
+        target=tile.getCoord().offSet(direction,-1);
+        if(target.isValid()) {
+            addMoveTile(chPosition.getTile(target),false,true);
+        }
+    }
+    
+    public ChessFigure copy(ChessPosition chPosition) {
+        Pawn res = new Pawn(this.side);
         res.moveTo(chPosition.getTile(this.tile.getCoord()));
         return res;
     }

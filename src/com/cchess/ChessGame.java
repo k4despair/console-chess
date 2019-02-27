@@ -35,7 +35,7 @@ public class ChessGame {
             if(i%2==1) System.out.println();
         }
         System.out.print((i/2+1) + ". "+((i/2+1<10)? " ":""));
-        if(i/2+1<10) System.out.print(" ");
+        
     }
     
     public void gameLoop() {

@@ -39,6 +39,11 @@ public class ChessPosition {
         figures.add(new Knight(Side.BLACK).moveTo(board[7][1]));
         figures.add(new Knight(Side.BLACK).moveTo(board[7][6]));
         
+        for(int i=0;i<8;i++) {
+            figures.add(new Pawn(Side.WHITE).moveTo(board[1][i]));
+            figures.add(new Pawn(Side.BLACK).moveTo(board[6][i]));
+        }
+        
         evaluate();
     }
     

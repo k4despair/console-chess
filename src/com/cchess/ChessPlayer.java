@@ -40,7 +40,8 @@ class ChessPlayerMiniMax implements ChessPlayer {
                 if(game.positions[depth+1].applyMove(move)) {
                     double tmp=Double.NEGATIVE_INFINITY;
                     if(depth+2==game.positions.length) tmp=-game.positions[depth+1].getValue();
-                    else tmp=-evaluate(game,depth+1,clamp);
+                    else tmp=-evaluate(game,depth+1,-res);
+                    if(tmp>=clamp) return clamp;
                     if(tmp>res) {
                         res=tmp;
                         if(depth==0) best=move;
