@@ -7,7 +7,7 @@ import com.cchess.Chess.*;
 
 public class ChessGame {
     private final int logFrame = 10;
-    final int deepAI = 4;
+    final int deepAI = 5;
     public ChessPosition[] positions = new ChessPosition[deepAI+1];
     
     private ChessPlayer playerW, playerB;

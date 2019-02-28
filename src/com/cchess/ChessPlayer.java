@@ -39,7 +39,7 @@ class ChessPlayerMiniMax implements ChessPlayer {
                 game.positions[depth+1].copyPosition(game.positions[depth]);
                 if(game.positions[depth+1].applyMove(move)) {
                     double tmp=Double.NEGATIVE_INFINITY;
-                    if(depth+2==game.positions.length) tmp=-game.positions[depth+1].getValue();
+                    if(depth+2==game.positions.length) tmp=-(1+.05*Math.random())*game.positions[depth+1].getValue();
                     else tmp=-evaluate(game,depth+1,-res);
                     if(tmp>=clamp) return clamp;
                     if(tmp>res) {

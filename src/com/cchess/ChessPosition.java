@@ -66,7 +66,7 @@ public class ChessPosition {
     
     public boolean evaluate() {
         for(int i=0;i<64;i++) board[i/8][i%8].init();
-        value=0;
+        value=.5;
         for(int i=0;i<figures.size();i++) {
             ChessFigure nextFigure=figures.get(i);
             if(nextFigure.getTile()==null) continue;
