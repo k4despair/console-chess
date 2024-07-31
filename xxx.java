@@ -1,5 +1,9 @@
-@aaa(bbbsssccc)
-  while (i>0) {
+@xxx(werwewer)
+  while (a>0) {
     i++;
-    some.another(i)
+    ttt.sd(i);
+    sdsd++;
+    if true {
+      i = 0;
+    }
   }
